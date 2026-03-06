@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>中药铺配方小游戏</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+  <div class="hud">
+    <div class="ip elder">
+      <div class="avatar-wrap" id="elder-wrap">
+        <img class="avatar" id="elder-img" src="assets/elder.png" alt="老者IP">
+      </div>
+      <div class="bubble" id="elder-bubble"></div>
+    </div>
+    <h1>中药铺配方</h1>
+    <div class="stats">积分 <span id="score">0</span> | 第 <span id="round">1</span>/<span id="rounds">5</span> 局
+      <button id="bg-upload-btn" class="secondary" style="margin-left:8px">更换背景</button>
+      <input id="bg-file" type="file" accept="image/*" hidden>
+      <button id="gif-fail-btn" class="secondary" style="margin-left:6px">失败GIF</button>
+      <input id="gif-fail-file" type="file" accept="image/*" hidden>
+      <button id="gif-success-btn" class="secondary" style="margin-left:6px">成功GIF</button>
+      <input id="gif-success-file" type="file" accept="image/*" hidden>
+    </div>
+  </div>
+  <div class="scene">
+    <aside class="cabinet">
+      <div class="cabinet-title">药柜</div>
+      <div class="herb-grid" id="herb-grid"></div>
+    </aside>
+    <section class="work">
+      <div class="prescription">
+        <div class="prescription-title">药方</div>
+        <div class="formula-name" id="formula-name"></div>
+        <ul class="formula-list" id="formula-list"></ul>
+        <div class="actions">
+          <button id="next-formula" class="secondary">换方</button>
+          <button id="reset" class="link">清锅</button>
+        </div>
+      </div>
+      <div class="pot-area">
+        <div class="pot" id="pot">
+          <img id="pot-img" class="pot-sprite" src="assets/123.PNG" alt="银锅">
+          <div class="steam">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="added-title">已下药材</div>
+        <ul class="added-list" id="added-list"></ul>
+      </div>
+      
+    </section>
+  </div>
+  <footer class="footer">
+    <div>点击或拖拽药材至银锅；配齐整方获得积分</div>
+  </footer>
+  <div id="result-overlay" class="result-overlay">
+    <img id="result-gif" alt="结果动画">
+  </div>
+  <script>
+    (function(){
+      try{
+        localStorage.removeItem('tcm_gif_success');
+        localStorage.removeItem('tcm_gif_fail');
+        localStorage.setItem('tcm_gif_success','assets/chenggong.gif');
+        localStorage.setItem('tcm_gif_fail','assets/shibai.gif');
+        localStorage.setItem('tcm_avatar_pot','assets/123.PNG');
+      }catch(e){}
+      function potFallback(){
+        var img=document.getElementById('pot-img');
+        if(!img) return;
+        var def='assets/123.PNG';
+        try{ img.src = localStorage.getItem('tcm_avatar_pot') || def; }
+        catch(e){ img.src = def; }
+        if((!img.complete||!img.naturalWidth)||img.currentSrc===''||img.currentSrc.endsWith('undefined')){
+          img.src=def;
+        }
+        img.onerror=function(){ img.src=def; };
+      }
+      if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',potFallback)}else{potFallback()}
+    })();
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
